@@ -1,0 +1,36 @@
+General:
+    ☐ sound on click (changable)
+    ☐ animated tutorials to show the gameplay and rules
+    ☐ save user games (time spent, moves, pegs left)
+    ☐ save user settings
+    ☐ save current game
+    ☐ build a custom board
+    ☐ add stages (same size with various difficulties, then augmenting the size)
+    ☐ add challenges or mini games
+
+
+
+Home Page:
+    ☐ settings icon
+    ☐ a smaller board that animates to board page on click
+    ☐ previous matches records (moves, pegs left, timing)
+    ☐ small animated particles hovering around
+
+S1ettings Page:
+    ☐ enables/disable DarkMode
+    ☐ enables/disable Auto move
+    ☐ change audio to sound, vibration, mute
+    ☐ change pegs color
+    ☐ change pegs shape
+    ☐ change board arrangment
+
+Board Page:
+    ☐ show Time (start after first move)
+    ☐ show remaining pegs to move
+    ☐ show moves made already
+    ☐ reset button to restart the game
+    ☐ undo move 
+    ☐ tutorial to explain option on this page at first
+    ☐ manual button to play tutorial
+    ☐ show end dialog (win/lose)
+    ☐ back button
