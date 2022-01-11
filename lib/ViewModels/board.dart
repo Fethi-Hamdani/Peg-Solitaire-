@@ -6,9 +6,14 @@ import 'package:pegsolitaire/Models/peg.dart';
 class Board extends ChangeNotifier {
   BoardSettings settings;
   List<Peg> _pegs = [];
+  List<Move> _movesHistory = [];
   List<Move> _moves = [];
 
   Board({required this.settings}) {
+    distributeGame();
+  }
+
+  void distributeGame() {
     for (var i = 0; i < settings.size; i++) {
       for (var j = 1; j <= settings.size; j++) {
         int index = i * settings.size + j;
@@ -25,6 +30,7 @@ class Board extends ChangeNotifier {
         ));
       }
     }
+    notifyListeners();
   }
 
   Peg? get selectedPeg {
@@ -43,12 +49,39 @@ class Board extends ChangeNotifier {
     return settings.size * settings.size;
   }
 
+  void undoMove() {
+    if (_movesHistory.isNotEmpty) {
+      Move move = _movesHistory.removeLast();
+      changePegState(move.destination, PegState.empty);
+      changePegState(move.medium, PegState.full);
+      changePegState(move.original, PegState.full);
+    }
+  }
+
+  void resetGame() {
+    _movesHistory = [];
+    _moves = [];
+    for (var item in _pegs) {
+      if (settings.empty.contains(item.index)) {
+        changePegState(item.index, PegState.empty);
+      } else {
+        if (item.state != PegState.blank)
+          changePegState(item.index, PegState.full);
+      }
+    }
+    notifyListeners();
+  }
+
   List<Peg> get fullPegs {
     return _pegs
         .where((element) =>
             element.state == PegState.full ||
             element.state == PegState.selected)
         .toList();
+  }
+
+  int get moves {
+    return _movesHistory.length;
   }
 
   int get fullPegsCount {
@@ -76,44 +109,46 @@ class Board extends ChangeNotifier {
     notifyListeners();
   }
 
-  void pegClicked(int index) {
+  PegState pegClicked(int index) {
     Peg peg = pegAtIndex(index);
 
     switch (peg.state) {
       case PegState.full:
-        fullPegClicked(index);
-        break;
+        return fullPegClicked(index);
       case PegState.empty:
-        emptyPegClicked(index);
-        break;
+        return emptyPegClicked(index);
+
       case PegState.possible:
-        possiblePegClicked(index);
-        break;
+        return possiblePegClicked(index);
       case PegState.blank:
         break;
       case PegState.selected:
         break;
     }
+    return peg.state;
   }
 
   // pegs clicked
 
-  emptyPegClicked(int index) {
+  PegState emptyPegClicked(int index) {
     clearSelectedPeg();
     clearPossiblePegs();
     notifyListeners();
+    return PegState.empty;
   }
 
-  fullPegClicked(int index) {
+  PegState fullPegClicked(int index) {
     clearPossiblePegs();
     changePegState(index, PegState.selected);
 
     _moves = possiblePegMoves(index);
     validateMoves();
+    return PegState.selected;
   }
 
-  possiblePegClicked(int index) {
+  PegState possiblePegClicked(int index) {
     Move move = _moves.firstWhere((element) => element.destination == index);
+    _movesHistory.add(move);
     print(move.toString());
 
     changePegState(move.original, PegState.empty);
@@ -123,6 +158,7 @@ class Board extends ChangeNotifier {
     _moves.clear();
 
     notifyListeners();
+    return PegState.full;
   }
 
   // settings tweaking
@@ -142,7 +178,7 @@ class Board extends ChangeNotifier {
 
   validateMoves() {
     _moves.forEach((element) {
-        changePegState(element.destination, PegState.possible);
+      changePegState(element.destination, PegState.possible);
     });
 
     notifyListeners();
@@ -202,7 +238,7 @@ class Board extends ChangeNotifier {
     res.removeWhere((element) =>
         !(pegAtIndex(element.destination).state == PegState.empty &&
             pegAtIndex(element.medium).state == PegState.full));
-    print("possibble moves for $index are " + res.length.toString());
+    //print("possibble moves for $index are " + res.length.toString());
     return res;
   }
 }

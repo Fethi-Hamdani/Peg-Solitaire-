@@ -7,7 +7,22 @@ General:
     ☐ build a custom board
     ☐ add stages (same size with various difficulties, then augmenting the size)
     ☐ add challenges or mini games
+    ☐ lock device to portrait on Mobile
 
+Stages:
+    ☐ add mini stages (number 5 in a normal board)
+   
+
+Animation:
+    ☐ starting the game from home page
+    ☐ switchin peg state
+    ☐ challenges page start
+    ☐ settings page start
+
+responsive design:
+    ☐ Web
+    ☐ Mobile
+    ☐ Desktop
 
 
 Home Page:
@@ -16,7 +31,7 @@ Home Page:
     ☐ previous matches records (moves, pegs left, timing)
     ☐ small animated particles hovering around
 
-S1ettings Page:
+Settings Page:
     ☐ enables/disable DarkMode
     ☐ enables/disable Auto move
     ☐ change audio to sound, vibration, mute
@@ -26,11 +41,24 @@ S1ettings Page:
 
 Board Page:
     ☐ show Time (start after first move)
-    ☐ show remaining pegs to move
-    ☐ show moves made already
-    ☐ reset button to restart the game
-    ☐ undo move 
+    ✔ show remaining pegs to move @done (1/11/2022, 8:13:45 PM)
+    ✔ show moves made already @done (1/11/2022, 8:27:33 PM)
+    ✔ reset button to restart the game @done (1/11/2022, 8:13:52 PM)
+    ✔ undo move @done (1/11/2022, 8:27:30 PM)
     ☐ tutorial to explain option on this page at first
-    ☐ manual button to play tutorial
+    ☐ manual button to check tutorial
     ☐ show end dialog (win/lose)
     ☐ back button
+    
+
+Peg State Change:
+    ☐ on select change to theme color
+    ☐ on eat jump over peg and tinify the eaten peg
+    ☐ represent possible moves with a small dot
+    ☐ only one color for highliting
+    ☐ neumorphic empty peg
+
+
+Expceptionals:
+    ☐ more than 100 language
+    ☐ draggable pegs instead of click

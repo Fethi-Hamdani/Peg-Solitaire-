@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pegsolitaire/Design/colors.dart';
+import 'package:pegsolitaire/Constantes/colors.dart';
 
 enum PegState { full, empty, possible, blank, selected }
 
