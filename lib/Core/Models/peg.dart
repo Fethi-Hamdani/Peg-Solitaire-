@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pegsolitaire/Constantes/colors.dart';
-
-enum PegState { full, empty, possible, blank, selected }
+import 'package:pegsolitaire/Core/Constantes/colors.dart';
+import 'package:pegsolitaire/Core/Enums/peg_state.dart';
 
 class Peg {
   int index;
@@ -14,7 +13,7 @@ class Peg {
   Color get color {
     switch (state) {
       case PegState.full:
-        return blue;
+        return Color(0xFF00ADB5);
       case PegState.empty:
         return greyScale1;
       case PegState.possible:

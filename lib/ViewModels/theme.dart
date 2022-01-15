@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:pegsolitaire/Enums/audio.dart';
-import 'package:pegsolitaire/Services/Storage/user_settings.dart';
+import 'package:pegsolitaire/Core/Enums/audio.dart';
+import 'package:pegsolitaire/Core/Services/Storage/user_settings.dart';
 
 class AppTheme extends ChangeNotifier {
   bool darkMode = false;

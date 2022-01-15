@@ -1,13 +1,15 @@
-import 'package:flutter/cupertino.dart';
-import 'package:pegsolitaire/Models/board_settings.dart';
-import 'package:pegsolitaire/Models/move.dart';
-import 'package:pegsolitaire/Models/peg.dart';
+import 'package:pegsolitaire/Core/Enums/directions.dart';
+import 'package:pegsolitaire/Core/Enums/peg_state.dart';
+import 'package:pegsolitaire/Core/Models/move.dart';
+import 'package:pegsolitaire/Core/Models/peg.dart';
 
-class Board extends ChangeNotifier {
+import 'board_settings.dart';
+
+class Board {
   BoardSettings settings;
   List<Peg> _pegs = [];
-  List<Move> _movesHistory = [];
-  List<Move> _moves = [];
+
+  // init methodes
 
   Board({required this.settings}) {
     distributeGame();
@@ -30,8 +32,9 @@ class Board extends ChangeNotifier {
         ));
       }
     }
-    notifyListeners();
   }
+
+  // setters and getters
 
   Peg? get selectedPeg {
     try {
@@ -49,43 +52,12 @@ class Board extends ChangeNotifier {
     return settings.size * settings.size;
   }
 
-  void undoMove() {
-    if (_movesHistory.isNotEmpty) {
-      Move move = _movesHistory.removeLast();
-      changePegState(move.destination, PegState.empty);
-      changePegState(move.medium, PegState.full);
-      changePegState(move.original, PegState.full);
-    }
-  }
-
-  void resetGame() {
-    _movesHistory = [];
-    _moves = [];
-    for (var item in _pegs) {
-      if (settings.empty.contains(item.index)) {
-        changePegState(item.index, PegState.empty);
-      } else {
-        if (item.state != PegState.blank)
-          changePegState(item.index, PegState.full);
-      }
-    }
-    notifyListeners();
-  }
-
   List<Peg> get fullPegs {
     return _pegs
         .where((element) =>
             element.state == PegState.full ||
             element.state == PegState.selected)
         .toList();
-  }
-
-  int get moves {
-    return _movesHistory.length;
-  }
-
-  int get fullPegsCount {
-    return fullPegs.length;
   }
 
   int get totallPegs {
@@ -99,95 +71,23 @@ class Board extends ChangeNotifier {
     return possibleMoves.isEmpty;
   }
 
+  // functions
+
+  void pegJump({required Move move}) {
+    changePegState(move.original, PegState.empty);
+    changePegState(move.medium, PegState.empty);
+    changePegState(move.destination, PegState.full);
+    clearPossiblePegs();
+  }
+
   Peg pegAtIndex(int index) {
     return _pegs.firstWhere((element) => element.index == index,
         orElse: () => Peg(index: 0, state: PegState.empty));
   }
 
-  changePegState(int index, PegState status) {
-    _pegs.firstWhere((element) => element.index == index).state = status;
-    notifyListeners();
-  }
-
-  PegState pegClicked(int index) {
-    Peg peg = pegAtIndex(index);
-
-    switch (peg.state) {
-      case PegState.full:
-        return fullPegClicked(index);
-      case PegState.empty:
-        return emptyPegClicked(index);
-
-      case PegState.possible:
-        return possiblePegClicked(index);
-      case PegState.blank:
-        break;
-      case PegState.selected:
-        break;
-    }
-    return peg.state;
-  }
-
-  // pegs clicked
-
-  PegState emptyPegClicked(int index) {
-    clearSelectedPeg();
-    clearPossiblePegs();
-    notifyListeners();
-    return PegState.empty;
-  }
-
-  PegState fullPegClicked(int index) {
-    clearPossiblePegs();
-    changePegState(index, PegState.selected);
-
-    _moves = possiblePegMoves(index);
-    validateMoves();
-    return PegState.selected;
-  }
-
-  PegState possiblePegClicked(int index) {
-    Move move = _moves.firstWhere((element) => element.destination == index);
-    _movesHistory.add(move);
-    print(move.toString());
-
-    changePegState(move.original, PegState.empty);
-    changePegState(move.medium, PegState.empty);
-    changePegState(move.destination, PegState.full);
-    clearPossiblePegs();
-    _moves.clear();
-
-    notifyListeners();
-    return PegState.full;
-  }
-
-  // settings tweaking
-
-  clearPossiblePegs() {
-    possibleMoves.forEach((element) {
-      changePegState(element.index, PegState.empty);
-    });
-    _moves.clear();
-    clearSelectedPeg();
-    notifyListeners();
-  }
-
-  clearSelectedPeg() {
-    if (selectedPeg != null) changePegState(selectedPeg!.index, PegState.full);
-  }
-
-  validateMoves() {
-    _moves.forEach((element) {
-      changePegState(element.destination, PegState.possible);
-    });
-
-    notifyListeners();
-  }
-
-  // assistive functions
-
   List<Move> possiblePegMoves(int index) {
     List<Move> res = [];
+
     // Top check
     int? topIndex =
         index - (settings.size * 2) > 0 ? index - (settings.size * 2) : null;
@@ -238,7 +138,44 @@ class Board extends ChangeNotifier {
     res.removeWhere((element) =>
         !(pegAtIndex(element.destination).state == PegState.empty &&
             pegAtIndex(element.medium).state == PegState.full));
-    //print("possibble moves for $index are " + res.length.toString());
+
+    //  print("possibble moves for $index are " + _moves.length.toString());
+
     return res;
   }
+
+  void resetGame() {
+    for (var item in _pegs) {
+      if (settings.empty.contains(item.index)) {
+        changePegState(item.index, PegState.empty);
+      } else {
+        if (item.state != PegState.blank)
+          changePegState(item.index, PegState.full);
+      }
+    }
+  }
+
+  void undoMove(Move move) {
+    changePegState(move.destination, PegState.empty);
+    changePegState(move.medium, PegState.full);
+    changePegState(move.original, PegState.full);
+  }
+
+  void changePegState(int index, PegState status) {
+    _pegs.firstWhere((element) => element.index == index).state = status;
+  }
+
+  void clearSelectedPeg() {
+    if (selectedPeg != null) changePegState(selectedPeg!.index, PegState.full);
+  }
+
+  void clearPossiblePegs() {
+    possibleMoves.forEach((element) {
+      changePegState(element.index, PegState.empty);
+    });
+
+    clearSelectedPeg();
+  }
+
+ 
 }

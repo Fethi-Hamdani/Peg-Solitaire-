@@ -1,9 +1,9 @@
 import 'package:hive/hive.dart';
-import 'package:pegsolitaire/Enums/audio.dart';
+import 'package:pegsolitaire/Core/Enums/audio.dart';
 
 class UserSettingsBox {
   static Box? box;
-  static const String boxName = "boxName box";
+  static const String boxName = "boxName settings";
   static const String darkMode = "darkMode";
   static const String autoMove = "autoMove";
   static const String audio = "audio";

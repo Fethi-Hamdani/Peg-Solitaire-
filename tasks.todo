@@ -2,22 +2,34 @@ General:
     ☐ sound on click (changable)
     ☐ animated tutorials to show the gameplay and rules
     ☐ save user games (time spent, moves, pegs left)
-    ☐ save user settings
+    ✔ save user settings @done (1/11/2022, 9:15:26 PM)
     ☐ save current game
     ☐ build a custom board
     ☐ add stages (same size with various difficulties, then augmenting the size)
     ☐ add challenges or mini games
     ☐ lock device to portrait on Mobile
+    ☐ use just_audio for audio playing (on peg selected, on peg jumped)
+    ☐ add special pegs (diaonal jumper, double jumper... etc, wall(can be jumped though but not deleted))
+    ☐ destroy a random peg
+    ☐ add user wallet (gained from game score, 100 coin gift at the start)
+    ☐ Time Laps (must finish the game before the time run up (less than 3 minutes))
 
+Pegs:
+    ☐ normal peg
+    ☐ peg with weight (3 jumps to delete)
+    ☐ diagonal jumper
+    ☐ auto move by a certain duration (moves randomly each 20 seconds)
 Stages:
     ☐ add mini stages (number 5 in a normal board)
    
 
 Animation:
+    ☐ add shimmer animation
     ☐ starting the game from home page
     ☐ switchin peg state
     ☐ challenges page start
     ☐ settings page start
+    ☐ animate number incrementation
 
 responsive design:
     ☐ Web
@@ -49,6 +61,9 @@ Board Page:
     ☐ manual button to check tutorial
     ☐ show end dialog (win/lose)
     ☐ back button
+    ☐ on game canceld dialog
+    ☐ on game restarted dialog
+    ☐ share completed match
     
 
 Peg State Change:

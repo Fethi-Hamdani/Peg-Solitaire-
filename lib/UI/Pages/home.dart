@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pegsolitaire/Pages/game.dart';
-import 'package:pegsolitaire/Pages/settings.dart';
+import 'package:pegsolitaire/UI/Pages/game.dart';
+import 'package:pegsolitaire/UI/Pages/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

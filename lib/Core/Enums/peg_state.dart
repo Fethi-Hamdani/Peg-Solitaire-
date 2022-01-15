@@ -1,0 +1,1 @@
+enum PegState { full, empty, possible, blank, selected }

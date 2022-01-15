@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pegsolitaire/UI/Pages/home.dart';
 import 'package:provider/provider.dart';
 
-import 'Pages/home.dart';
 import 'ViewModels/theme.dart';
 
 void main() {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pegsolitaire/Models/board_settings.dart';
-import 'package:pegsolitaire/ViewModels/board.dart';
-import 'package:pegsolitaire/Widgets/peg.dart';
+import 'package:pegsolitaire/Core/Models/board_settings.dart';
+import 'package:pegsolitaire/UI/Widgets/board/board.dart';
+import 'package:pegsolitaire/UI/Widgets/stopwatch.dart';
+import 'package:pegsolitaire/ViewModels/casual_game.dart';
 import 'package:provider/provider.dart';
 
 class Game1 extends StatefulWidget {
@@ -22,51 +23,50 @@ class _Game1State extends State<Game1> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => Board(settings: normalSettings),
+        create: (context) => CasualGame(settings: normalSettings),
         builder: (context, child) {
           return Scaffold(
               backgroundColor: Colors.grey,
-              body: Consumer<Board>(builder: (context, board, child) {
+              body: Consumer<CasualGame>(builder: (context, game, child) {
                 return Center(
                   //key: UniqueKey(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.2,
+                        height: MediaQuery.of(context).size.height * 0.1,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text("Remaining Pegs " +
-                                board.fullPegsCount.toString() +
+                                game.board.fullPegs.length.toString() +
                                 "/" +
-                                board.totallPegs.toString()),
-                            Text("gameEnded : ${board.gameEnded}"),
+                                game.board.totallPegs.toString()),
+                            Text("gameEnded : ${game.board.gameEnded}"),
                           ],
                         ),
                       ),
                       Container(
-                        width: board.settings.size * (pegSize + 10),
-                        height: board.settings.size * (pegSize + 10),
-                        // padding: EdgeInsets.all(20),
-                        color: Colors.grey,
-                        child: GridView.count(
-                          childAspectRatio: 1,
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          crossAxisCount: board.settings.size,
-                          children: List.generate(board.itemsCount, (index) {
-                            return Center(
-                              child: PegView(
-                                  key: Key("${index + 1}"),
-                                  pegSize: pegSize,
-                                  peg: board.pegAtIndex(index + 1)),
-                            );
-                          }),
+                          alignment: Alignment.center,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          child: StopwatchTimer(
+                            stopwatch: game.timer,
+                          )),
+                      Expanded(
+                        child: Center(
+                          child: Container(
+                            width: game.settings.size * (pegSize + 10),
+                            height: game.settings.size * (pegSize + 10),
+                            // padding: EdgeInsets.all(20),
+                            color: Colors.grey,
+                            child: PegBoard(
+                              pegSize: pegSize,
+                            ),
+                          ),
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.2,
+                        height: MediaQuery.of(context).size.height * 0.1,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -76,7 +76,7 @@ class _Game1State extends State<Game1> {
                                       MediaQuery.of(context).size.width * 0.3,
                                   child: ElevatedButton(
                                       onPressed: () {
-                                        board.resetGame();
+                                        game.resetGame();
                                       },
                                       child: Text("Reset Game"))),
                             ),
@@ -86,9 +86,10 @@ class _Game1State extends State<Game1> {
                                       MediaQuery.of(context).size.width * 0.3,
                                   child: ElevatedButton(
                                       onPressed: () {
-                                        board.undoMove();
+                                        game.undoMove();
                                       },
-                                      child: Text("Undo ${board.moves}"))),
+                                      child: Text(
+                                          "Undo ${game.movesMade}"))),
                             ),
                           ],
                         ),

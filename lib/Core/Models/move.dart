@@ -1,4 +1,5 @@
-enum Direction { Top, Bottom, Left, Right }
+
+import 'package:pegsolitaire/Core/Enums/directions.dart';
 
 class Move {
   Direction direction;
